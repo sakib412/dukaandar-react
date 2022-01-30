@@ -1,0 +1,44 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=fallback');
+
+@tailwind base;
+@tailwind components;
+
+// Additional styles
+@import 'additional-styles/utility-patterns.scss';
+@import 'additional-styles/range-slider.scss';
+@import 'additional-styles/toggle-switch.scss';
+@import 'additional-styles/flatpickr.scss';
+@import 'additional-styles/theme.scss';
+
+@tailwind utilities;
+
+
+// Theme Class
+
+.button-primary{
+    background-color: #00c9db;
+    &:hover{
+        background-color: #009aa8;
+    }
+}
+
+.text-primary-color{
+    color: #00c9db;
+}
+
+svg.back-icon{
+    stroke: #2c3e50;
+    &:hover{
+        stroke: #00c9db;
+    }
+}
+.otp-box input:last-child  {
+    margin-right: 0 !important;
+}
+button:disabled {
+    cursor: not-allowed;
+    color: darkgrey;
+    &:hover{
+        color: darkgrey;
+    }
+  }
