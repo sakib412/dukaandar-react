@@ -1,8 +1,7 @@
 /* eslint-disable eqeqeq */
 import React from 'react';
 import {
-  Link,
-  useHistory
+  Link
 } from 'react-router-dom';
 import { useForm } from "react-hook-form";
 
@@ -10,14 +9,14 @@ import OnboardingImage from '../images/onboarding-image.jpg';
 import OnboardingDecoration from '../images/auth-decoration.png';
 
 
-function Onboarding01() {
-  const history = useHistory();
+function Onboarding01(props) {
   const { register, handleSubmit, formState: { errors } } = useForm();
 
 
   const onSubmit = data => {
     console.log("Submit", data);
-    history.push("/onboarding-02");
+    props.setStep(2);
+
   };
 
   return (

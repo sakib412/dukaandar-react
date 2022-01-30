@@ -1,12 +1,11 @@
 import React, { useState } from 'react';
-import { Link, useHistory } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import OTPInput, { ResendOTP } from 'otp-input-react';
 
 import OnboardingImage from '../images/onboarding-image.jpg';
 import OnboardingDecoration from '../images/auth-decoration.png';
 
-function Onboarding02() {
-  const history = useHistory();
+function Onboarding02(props) {
   const [phone] = [1711717707];
   const [error, setError] = useState(false);
   const [erMsg, setErMsg] = useState(null);
@@ -27,7 +26,7 @@ function Onboarding02() {
 
     if (OTP.length === 6) {
       setError(false);
-      history.push("/onboarding-03")
+      props.setStep(3);
     } else {
       setErMsg("Please enter 6 digits OTP");
       setError(true);
@@ -78,12 +77,16 @@ function Onboarding02() {
 
             <div className="px-4 py-8">
               <div className="max-w-md mx-auto">
-                <Link to="/onboarding-01" className='inline-flex items-center justify-center h-10 w-10 rounded-md mb-3' style={{ backgroundColor: "rgba(113,134,157,.1)" }}>
+                <p
+                  className='inline-flex items-center justify-center h-10 w-10 rounded-md mb-3 cursor-pointer'
+                  style={{ backgroundColor: "rgba(113,134,157,.1)" }}
+                  onClick={() => { props.setStep(1) }}
+                >
                   <svg xmlns="http://www.w3.org/2000/svg" className='back-icon' width="20" height="20" viewBox="0 0 24 24" strokeWidth="1.5" stroke="#2c3e50" fill="none" strokeLinecap="round" strokeLinejoin="round">
                     <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                     <polyline points="15 6 9 12 15 18" />
                   </svg>
-                </Link>
+                </p>
                 <p className='my-5'>Verification</p>
                 <h1 className="text-2xl font-semibold mb-2" style={{ color: "#1e2022" }}>We sent you an SMS code</h1>
                 <p>On number : <a className='text-indigo-500 hover:text-indigo-600 ' href={`tel:+880${phone}`}>+880{phone}</a></p>

@@ -60,6 +60,7 @@ import AvatarPage from './pages/component/AvatarPage';
 import TooltipPage from './pages/component/TooltipPage';
 import AccordionPage from './pages/component/AccordionPage';
 import IconsPage from './pages/component/IconsPage';
+import Register from './pages/Register';
 
 function App() {
 
@@ -223,6 +224,9 @@ function App() {
         </Route>
         <Route exact path="/component/icons">
           <IconsPage />
+        </Route>
+        <Route exact path="/register">
+          <Register />
         </Route>
         <Route path="*">
           <PageNotFound />

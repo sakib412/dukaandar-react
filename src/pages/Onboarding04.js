@@ -11,17 +11,13 @@ import OnboardingImage from '../images/onboarding-image.jpg';
 import OnboardingDecoration from '../images/auth-decoration.png';
 
 
-function Onboarding03() {
+function Onboarding04(props) {
   const history = useHistory();
   const { register, handleSubmit, formState: { errors } } = useForm();
-
-
   const onSubmit = data => {
     console.log("Submit", data);
-    history.push("/onboarding-04");
+    history.push("/");
   };
-  console.log(errors);
-
 
   return (
     <main className="bg-white">
@@ -64,12 +60,15 @@ function Onboarding03() {
 
             <div className="px-4 py-8">
               <div className="max-w-md mx-auto">
-                <Link to="onboarding-03" className='inline-flex items-center justify-center h-10 w-10 rounded-md mb-5' style={{ backgroundColor: "rgba(113,134,157,.1)" }}>
+                <p
+                  className='inline-flex items-center justify-center h-10 w-10 rounded-md mb-5 cursor-pointer'
+                  style={{ backgroundColor: "rgba(113,134,157,.1)" }}
+                  onClick={() => { props.setStep(3) }}>
                   <svg xmlns="http://www.w3.org/2000/svg" className='back-icon' width="20" height="20" viewBox="0 0 24 24" strokeWidth="1.5" stroke="#2c3e50" fill="none" strokeLinecap="round" strokeLinejoin="round">
                     <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                     <polyline points="15 6 9 12 15 18" />
                   </svg>
-                </Link>
+                </p>
                 <p className='mt-5 mb-2'>Shop info</p>
                 <h1 className="text-2xl font-semibold mb-10" style={{ color: "#1e2022" }}>Create your shop information</h1>
                 {/* Form */}
@@ -194,4 +193,4 @@ function Onboarding03() {
   );
 }
 
-export default Onboarding03;
+export default Onboarding04;

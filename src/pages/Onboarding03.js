@@ -1,8 +1,7 @@
 /* eslint-disable eqeqeq */
 import React, { useEffect, useState } from 'react';
 import {
-  Link,
-  useHistory
+  Link
 } from 'react-router-dom';
 import { useForm } from "react-hook-form";
 
@@ -13,8 +12,7 @@ import OnboardingImage from '../images/onboarding-image.jpg';
 import OnboardingDecoration from '../images/auth-decoration.png';
 
 
-function Onboarding03() {
-  const history = useHistory();
+function Onboarding03(props) {
   const { register, watch, getValues, handleSubmit, formState: { errors } } = useForm();
   const [isPassShown, setIsPassShown] = useState(false);
   const [isCPassShown, setIsCPassShown] = useState(false);
@@ -23,7 +21,8 @@ function Onboarding03() {
 
   const onSubmit = data => {
     console.log("Submit", data);
-    history.push("/onboarding-04");
+    props.setStep(4);
+
   };
 
   const stateCh = watch("state");
@@ -73,12 +72,15 @@ function Onboarding03() {
 
             <div className="px-4 py-8">
               <div className="max-w-md mx-auto">
-                <Link to="onboarding-02" className='inline-flex items-center justify-center h-10 w-10 rounded-md mb-5' style={{ backgroundColor: "rgba(113,134,157,.1)" }}>
+                <p
+                  className='inline-flex items-center justify-center h-10 w-10 rounded-md mb-5 cursor-pointer'
+                  style={{ backgroundColor: "rgba(113,134,157,.1)" }}
+                  onClick={() => { props.setStep(2) }}>
                   <svg xmlns="http://www.w3.org/2000/svg" className='back-icon' width="20" height="20" viewBox="0 0 24 24" strokeWidth="1.5" stroke="#2c3e50" fill="none" strokeLinecap="round" strokeLinejoin="round">
                     <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                     <polyline points="15 6 9 12 15 18" />
                   </svg>
-                </Link>
+                </p>
                 <p className='mt-5 mb-2'>Information</p>
                 <h1 className="text-2xl font-semibold mb-10" style={{ color: "#1e2022" }}>Provide your correct information</h1>
                 {/* Form */}
@@ -90,7 +92,7 @@ function Onboarding03() {
                         {...register("fullname")}
                         id='fullname'
                         className="form-input w-full"
-                        type="text" />
+                        type="text" autoFocus />
                     </div>
                     <div>
                       <label className="block text-sm font-medium mb-1" htmlFor="email">Email Address </label>
