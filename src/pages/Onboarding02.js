@@ -4,9 +4,10 @@ import OTPInput, { ResendOTP } from 'otp-input-react';
 
 import OnboardingImage from '../images/onboarding-image.jpg';
 import OnboardingDecoration from '../images/auth-decoration.png';
+import axiosInstance from '../utils/axios';
 
 function Onboarding02(props) {
-  const [phone] = [1711717707];
+  const phone = localStorage.getItem("PHONE")
   const [error, setError] = useState(false);
   const [erMsg, setErMsg] = useState(null);
   const [OTP, setOTP] = useState("");
@@ -26,7 +27,24 @@ function Onboarding02(props) {
 
     if (OTP.length === 6) {
       setError(false);
-      props.setStep(3);
+      axiosInstance.post("/verify-otp",
+        {
+          phone: localStorage.getItem("PHONE"),
+          otp: OTP
+        }).then(response => {
+          if (response.data?.results?.user?.isActive) {
+
+            props.setStep(3);
+          } else {
+            setError(true);
+            setErMsg("Try again");
+          }
+
+        }).catch(err => {
+          setError(true);
+          setErMsg(err.response.data?.results?.message);
+          console.log(err.response);
+        })
     } else {
       setErMsg("Please enter 6 digits OTP");
       setError(true);

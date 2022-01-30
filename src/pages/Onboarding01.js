@@ -1,5 +1,5 @@
 /* eslint-disable eqeqeq */
-import React from 'react';
+import React, { useState } from 'react';
 import {
   Link
 } from 'react-router-dom';
@@ -7,15 +7,23 @@ import { useForm } from "react-hook-form";
 
 import OnboardingImage from '../images/onboarding-image.jpg';
 import OnboardingDecoration from '../images/auth-decoration.png';
+import axiosInstance from '../utils/axios';
 
 
 function Onboarding01(props) {
   const { register, handleSubmit, formState: { errors } } = useForm();
+  const [errorMsg, setErrorMsg] = useState("");
 
 
   const onSubmit = data => {
-    console.log("Submit", data);
-    props.setStep(2);
+    setErrorMsg("");
+    axiosInstance.post("/signup/", data).then(res => {
+      localStorage.setItem("ACCESS_TOKEN", res.data?.results?.token);
+      localStorage.setItem("PHONE", data?.phone);
+      props.setStep(2);
+    }).catch(err => {
+      setErrorMsg(err.response?.data?.message);
+    })
 
   };
 
@@ -80,7 +88,7 @@ function Onboarding01(props) {
                             maxLength: { value: 10, message: "Phone number can not be more than 10" },
                           })
                         }
-                        className={`form-input w-full pl-24 ${errors.phone ?
+                        className={`form-input w-full pl-24 ${errors.phone || errorMsg ?
                           ' focus:border-red-500 border-red-400 hover:border-red-500' : ""} `}
                         type="number" />
 
@@ -91,6 +99,9 @@ function Onboarding01(props) {
                     </div>
                     {errors.phone &&
                       (<div className="text-xs mt-1 text-red-500">{errors.phone?.message}</div>)}
+                    {
+                      errorMsg && (<div className="text-xs mt-1 text-red-500">{errorMsg}</div>)
+                    }
 
                   </div>
                   <div>
