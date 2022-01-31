@@ -5,13 +5,19 @@ import OTPInput, { ResendOTP } from 'otp-input-react';
 import OnboardingImage from '../images/onboarding-image.jpg';
 import OnboardingDecoration from '../images/auth-decoration.png';
 import axiosInstance from '../utils/axios';
+import Toast from '../components/Toast';
 
 function Onboarding02(props) {
   const phone = localStorage.getItem("PHONE")
   const [error, setError] = useState(false);
+  const [successMsg, setSuccessMsg] = useState("");
+  const [open, setOpen] = useState(false);
   const [erMsg, setErMsg] = useState(null);
   const [OTP, setOTP] = useState("");
   const renderTime = () => React.Fragment;
+  const handleOpen = (val) => {
+    setOpen(val);
+  }
   const renderButton = (buttonProps) => {
     return (
       <>
@@ -51,6 +57,15 @@ function Onboarding02(props) {
     }
   }
   const resendOTP = () => {
+    axiosInstance.post("/resend-otp", { phone: localStorage.getItem("PHONE") })
+      .then(({ data }) => {
+        setOpen(true);
+        setSuccessMsg(data?.results?.message);
+      })
+      .catch(err => {
+        setError(true);
+        setErMsg(err.response.results.message);
+      })
 
 
   }
@@ -108,6 +123,10 @@ function Onboarding02(props) {
                 <p className='my-5'>Verification</p>
                 <h1 className="text-2xl font-semibold mb-2" style={{ color: "#1e2022" }}>We sent you an SMS code</h1>
                 <p>On number : <a className='text-indigo-500 hover:text-indigo-600 ' href={`tel:+880${phone}`}>+880{phone}</a></p>
+                <Toast open={open} setOpen={handleOpen} type="success" className="fixed top-1 right-1 z-60">
+                  {successMsg}
+                </Toast>
+
                 {/* Form */}
                 <form className='mt-8' onSubmit={onSubmit}>
                   <div className="space-y-3 mb-5">
@@ -138,7 +157,7 @@ function Onboarding02(props) {
 
                 <div className="text-sm mt-5">
                   <ResendOTP
-                    maxTime={5}
+                    maxTime={60}
                     onResendClick={resendOTP}
                     renderButton={renderButton}
                     renderTime={renderTime}

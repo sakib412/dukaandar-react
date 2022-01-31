@@ -1,5 +1,5 @@
 /* eslint-disable eqeqeq */
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
   Link,
   useHistory
@@ -9,15 +9,70 @@ import { useForm } from "react-hook-form";
 
 import OnboardingImage from '../images/onboarding-image.jpg';
 import OnboardingDecoration from '../images/auth-decoration.png';
+import axiosInstance from '../utils/axios';
 
 
 function Onboarding04(props) {
   const history = useHistory();
-  const { register, handleSubmit, formState: { errors } } = useForm();
+  const [categories, setCategories] = useState([]);
+  const { register, watch, setError, clearErrors, handleSubmit, formState: { errors } } = useForm();
   const onSubmit = data => {
     console.log("Submit", data);
-    history.push("/");
+    axiosInstance.put("/user/id", { shop: data })
+      .then((res) => {
+        console.log(res.data);
+        history.push("/");
+
+      })
+      .catch((err) => {
+        console.log(err.response);
+      })
   };
+  useEffect(() => {
+    axiosInstance.get("/category/")
+      .then((res) => {
+        console.log(res.data);
+        setCategories(res.data?.results);
+      })
+      .catch((err) => {
+        console.log(err.response);
+      })
+  }, []);
+
+  const slugWatcher = watch("slug");
+
+  const isAvailable = () => {
+    console.log("INside");
+    axiosInstance.post("/shop/is-available/", { slug: slugWatcher })
+      .then((response) => {
+        clearErrors("slug")
+        console.log(response);
+
+      })
+      .catch((error) => {
+        setError("slug", {
+          type: "server",
+          message: error.response?.data?.results?.message
+        })
+        console.log(error.response);
+      })
+  }
+  let timer = useRef(null);
+
+  useEffect(() => {
+    if (timer) {
+      clearTimeout(timer.current)
+    }
+    timer.current = setTimeout(() => {
+      isAvailable()
+
+    }, 500)
+
+
+    console.log("Changed");
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [slugWatcher]);
 
   return (
     <main className="bg-white">
@@ -54,7 +109,6 @@ function Onboarding04(props) {
                 </Link>
 
               </div>
-
 
             </div>
 
@@ -124,10 +178,6 @@ function Onboarding04(props) {
                         (<div className="text-xs mt-1 text-red-500">{errors.slug?.message}</div>)}
                     </div>
 
-
-
-
-
                     <div>
                       <label className="block text-sm font-medium mb-1" htmlFor="country">Category <span className="text-red-500">*</span></label>
                       <select id="category" {...register("category",
@@ -135,15 +185,14 @@ function Onboarding04(props) {
                           required: "Please select category"
                         })}
                         className={`form-input w-full ${errors.category ? ' focus:border-red-500 border-red-300 hover:border-red-500' : ""} `}>
-                        <option value="global">Global</option>
-                        <option value="fashion">Fashion</option>
+                        <option value={null}>Select category</option>
+                        {categories && categories?.map((category) => (
+                          <option value={category?._id}>{category?.name}</option>
+                        ))}
                       </select>
                       {errors.category &&
                         (<div className="text-xs mt-1 text-red-500">{errors.category?.message}</div>)}
                     </div>
-
-
-
 
                     <div>
                       <label className="block text-sm font-medium mb-1" htmlFor="role">Description </label>
@@ -155,10 +204,9 @@ function Onboarding04(props) {
 
                     </div>
 
-
-
                     <div>
-                      <button type='submit' className="btn button-primary py-2 text-white block text-center w-full">Next Step -&gt;</button>
+                      <button type='submit' className="btn button-primary py-2 text-white block text-center w-full">
+                        Complete</button>
                     </div>
                   </div>
 

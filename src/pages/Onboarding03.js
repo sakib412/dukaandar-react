@@ -10,6 +10,7 @@ import districts from './utility/data/districts';
 
 import OnboardingImage from '../images/onboarding-image.jpg';
 import OnboardingDecoration from '../images/auth-decoration.png';
+import axiosInstance from '../utils/axios';
 
 
 function Onboarding03(props) {
@@ -21,8 +22,28 @@ function Onboarding03(props) {
 
   const onSubmit = data => {
     console.log("Submit", data);
-    props.setStep(4);
+    const reqBody = {
+      fullname: data?.fullname,
+      password: data.password,
+      email: data?.email,
+      address: {
+        country: data?.country,
+        state: data?.state,
+        city: data?.city,
+        street: data?.street,
+        zipcode: data?.zipcode,
 
+
+      }
+    }
+    axiosInstance.put("/user/id", reqBody)
+      .then((res) => {
+        console.log(res.data);
+        props.setStep(4);
+      })
+      .catch((err) => {
+        console.log(err.response);
+      })
   };
 
   const stateCh = watch("state");
@@ -241,10 +262,10 @@ function Onboarding03(props) {
                           (<div className="text-xs mt-1 text-red-500">{errors.city?.message}</div>)}
                       </div>
                       <div>
-                        <label htmlFor="zip" className="block text-sm font-medium mb-1">ZIP code</label>
+                        <label htmlFor="zipcode" className="block text-sm font-medium mb-1">ZIP code</label>
                         <input
-                          {...register("zip")}
-                          type="text" id='zip'
+                          {...register("zipcode")}
+                          type="text" id='zipcode'
                           className="form-input w-full" />
                       </div>
                     </div>

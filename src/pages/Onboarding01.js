@@ -76,6 +76,7 @@ function Onboarding01(props) {
                 </a>
                 <p className='mt-5 mb-2'>Welcome</p>
                 <h1 className="text-2xl font-semibold mb-10" style={{ color: "#1e2022" }}>You are just a step back to get started</h1>
+
                 {/* Form */}
                 <form onSubmit={handleSubmit(onSubmit)}>
                   <div className="space-y-3 mb-6">

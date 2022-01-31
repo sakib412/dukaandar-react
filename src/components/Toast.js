@@ -1,12 +1,18 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 function Toast({
   children,
   className,
   type,
   open,
-  setOpen
+  setOpen,
+  timeout = 5
 }) {
+  useEffect(() => {
+    setTimeout(() => {
+      setOpen(false);
+    }, timeout * 1000);
+  }, [setOpen, timeout]);
 
   const typeIcon = (type) => {
     switch (type) {
@@ -44,7 +50,7 @@ function Toast({
       case 'error':
         return 'bg-red-500';
       case 'success':
-        return 'bg-green-500';
+        return 'bg-green-400';
       default:
         return 'bg-indigo-500';
     }
@@ -54,12 +60,12 @@ function Toast({
     <>
       {open &&
         <div className={className}>
-        <div className={`inline-flex min-w-80 px-4 py-2 rounded-sm text-sm text-white ${typeColor(type)}`}>
+          <div className={`inline-flex min-w-80 px-4 py-2 rounded-sm text-sm text-white ${typeColor(type)}`}>
             <div className="flex w-full justify-between items-start">
               <div className="flex">
                 {typeIcon(type)}
                 <div className="font-medium">
-                {children}
+                  {children}
                 </div>
               </div>
               <button className="opacity-70 hover:opacity-80 ml-3 mt-[3px]" onClick={() => setOpen(false)}>
